@@ -11,7 +11,7 @@ const DashBoard = () => {
     if (aToken) {
       getDashData();
     }
-  }, [aToken]);
+  }, [aToken, getDashData]);
 
   return dashData && (
     <div className="w-full m-5 ">
