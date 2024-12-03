@@ -2,9 +2,11 @@ import { useContext, useState } from "react";
 import { assets } from "../assets/assets";
 import { AdminContext } from "../context/AdminContext";
 import { NavLink, useNavigate } from "react-router-dom";
+import { DoctorContext } from "../context/DoctorContext";
 
 const Navbar = () => {
   const { aToken, setAtoken } = useContext(AdminContext);
+  const {dToken,setDToken} = useContext(DoctorContext)
   const [showMenu, setShowMenu] = useState(false);
   const navigate = useNavigate()
 
@@ -13,6 +15,9 @@ const Navbar = () => {
     if (aToken) {
       setAtoken(''); 
       localStorage.removeItem('aToken');
+    }else{
+      setDToken('')
+      localStorage.removeItem('dToken')
     }
   };
 
@@ -27,13 +32,14 @@ const Navbar = () => {
         <img onClick={() => setShowMenu(true)} className="w-6 md:hidden cursor-pointer" src={assets.menu_icon} alt="Menu Icon" />
       </div>
 
-
       <div className={`${showMenu ? 'fixed w-2/3' : "h-0 w-0"} md:hidden right-0 top-0 bottom-0 z-20 overflow-hidden bg-slate-200 transition-none`}>
       <div className="flex items-center justify-between px-5 py-6 ">
           <img className="w-auto h-24" src={assets.admin_logo} alt="Logo"/>
           <img className="w-7 transition-colors" onClick={() => setShowMenu(false)} src={assets.cross_icon} alt="Close Menu" />
       </div>
-      <ul className="flex flex-col items-center gap-5 mt-10 px-5 text-lg font-medium">
+      {
+        aToken &&
+        <ul className="flex flex-col items-center gap-5 mt-10 px-5 text-lg font-medium">
             <NavLink
               to="/admin-dashboard"
               className={({ isActive }) =>
@@ -71,6 +77,39 @@ const Navbar = () => {
               <li>Doctor List</li>
             </NavLink>
           </ul>
+      }
+      {
+        dToken &&
+        <ul className="flex flex-col items-center gap-5 mt-10 px-5 text-lg font-medium">
+            <NavLink
+              to="/doctor-dashboard"
+              className={({ isActive }) =>
+                isActive ? "text-primary border-primary " : "hover:text-primary"
+              }
+              onClick={() => setShowMenu(false)}
+            >
+              <li>Dashboard</li>
+            </NavLink>
+            <NavLink
+              to="/doctor-appointments"
+              className={({ isActive }) =>
+                isActive ? "text-primary  border-primary " : "hover:text-primary"
+              }
+              onClick={() => setShowMenu(false)}
+            >
+              <li>ALL Appointment</li>
+            </NavLink>
+            <NavLink
+              to="/doctor-profile"
+              className={({ isActive }) =>
+                isActive ? "text-primary  border-primary " : "hover:text-primary"
+              }
+              onClick={() => setShowMenu(false)}
+            >
+              <li>profile</li>
+            </NavLink>
+          </ul>
+      }
           <div className=" justify-items-center px-5 pt-36">
             <p>admin&copy;Doctorcare.com</p>
             <p className="font-thin text-sm">version 0.01</p>
